@@ -38,8 +38,7 @@ class LaporanBookingPage extends HookConsumerWidget {
             .watch(BookingProvider.notifier)
             .list(DateFormat('yyyy-MM-dd').format(selectedDate.value));
       }
-      // setState(() {
-      // });
+   
     }
 
     useEffect(() {
@@ -61,7 +60,6 @@ class LaporanBookingPage extends HookConsumerWidget {
       } else if (next is BookingProviderStateDone) {
         isLoading.value = false;
         bookings.value = next.model;
-        // print(pelanggan.value);
       }
     });
 

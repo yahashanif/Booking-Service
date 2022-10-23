@@ -10,13 +10,13 @@ class PelangganRepository extends BaseRepository {
   PelangganRepository({required super.dio});
 
   Future<List<Pelanggan>> listPelanggan() async {
-       final shared = await SharedPreferences.getInstance();
-    final xmodel = jsonDecode(shared.get(Constant.bearerName).toString());
-    String token = xmodel['token'];
+    String token = "";
+    await Constant().getShared().then((value) {
+      print(value);
+      token = value;
+    });
     final resp = await gets(
-        services: "${Constant.baseURLToken}Pelanggan",
-        token:
-            "${token}");
+        services: "${Constant.baseURLToken}Pelanggan", token: "${token}");
     List<Pelanggan> result = List.empty(growable: true);
     if (resp["data"] == null) {
       result = [];
@@ -30,17 +30,18 @@ class PelangganRepository extends BaseRepository {
   }
 
   Future<bool> inputPelanggan(Pelanggan p) async {
-       final shared = await SharedPreferences.getInstance();
-    final xmodel = jsonDecode(shared.get(Constant.bearerName).toString());
-    String token = xmodel['token'];
+    String token = "";
+    await Constant().getShared().then((value) {
+      print(value);
+      token = value;
+    });
     final body = {"name": p.name, "no_hp": p.noHp, "alamat": p.alamat};
     final service = "${Constant.baseURLToken}Pelanggan";
     print(service);
     final resp = await post(
       body: body,
       service: service,
-      token:
-          "${token}",
+      token: "${token}",
     );
     print(resp.toString());
     if (resp['status'] == "200") {
@@ -51,9 +52,11 @@ class PelangganRepository extends BaseRepository {
   }
 
   Future<bool> EditPelanggan(Pelanggan p) async {
-       final shared = await SharedPreferences.getInstance();
-    final xmodel = jsonDecode(shared.get(Constant.bearerName).toString());
-    String token = xmodel['token'];
+    String token = "";
+    await Constant().getShared().then((value) {
+      print(value);
+      token = value;
+    });
     final body = {
       "id": int.parse(p.id.toString()),
       "name": p.name,
@@ -65,8 +68,7 @@ class PelangganRepository extends BaseRepository {
     final resp = await post(
       body: body,
       service: service,
-      token:
-          "${token}",
+      token: "${token}",
     );
     print(resp.toString());
     if (resp['status'] == "200") {
@@ -77,18 +79,18 @@ class PelangganRepository extends BaseRepository {
   }
 
   Future<bool> DeletePelanggan(String id) async {
-       final shared = await SharedPreferences.getInstance();
-    final xmodel = jsonDecode(shared.get(Constant.bearerName).toString());
-    String token = xmodel['token'];
-    final service = "${Constant.baseURLToken}PelangganDelete/"+id;
-     final body = <String,dynamic>{};
-     
+    String token = "";
+    await Constant().getShared().then((value) {
+      print(value);
+      token = value;
+    });
+    final service = "${Constant.baseURLToken}PelangganDelete/" + id;
+    final body = <String, dynamic>{};
+
     final resp = await post(
-      
       body: body,
       service: service,
-      token:
-          "${token}",
+      token: "${token}",
     );
     print(body);
     if (resp['status'] == "200") {

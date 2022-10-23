@@ -11,13 +11,13 @@ import '../model/request_model.dart';
 class BookingRepository extends BaseRepository {
   BookingRepository({required super.dio});
 
-
- 
-
   Future<List<Booking>> listBooking({required String tgl}) async {
-    final shared = await SharedPreferences.getInstance();
-    final xmodel = jsonDecode(shared.get(Constant.bearerName).toString());
-    String token = xmodel['token'];
+    String token = "";
+    await Constant().getShared().then((value) {
+      print(value);
+      token = value;
+    });
+    // final shared = await SharedPreferences.getInstance();
     final param = tgl;
     final resp = await gets(
         services: Constant.baseURLToken + "booking",
@@ -38,11 +38,13 @@ class BookingRepository extends BaseRepository {
   }
 
   Future<List<Product>> listProduct() async {
-     final shared = await SharedPreferences.getInstance();
-    final xmodel = jsonDecode(shared.get(Constant.bearerName).toString());
-    String token = xmodel['token'];
-    final resp = await gets(
-        services: Constant.baseURLToken + "products", token: token);
+    String token = "";
+    await Constant().getShared().then((value) {
+      print(value);
+      token = value;
+    });
+    final resp =
+        await gets(services: Constant.baseURLToken + "products", token: token);
     // print(resp);
     List<Product> result = List.empty(growable: true);
     if (resp["data"] == null) {
@@ -57,11 +59,13 @@ class BookingRepository extends BaseRepository {
   }
 
   Future<bool> inputBooking(BookingRequest b) async {
-       final shared = await SharedPreferences.getInstance();
-    final xmodel = jsonDecode(shared.get(Constant.bearerName).toString());
-    String token = xmodel['token'];
+    String token = "";
+    await Constant().getShared().then((value) {
+      print(value);
+      token = value;
+    });
     final body = b.toJson();
-  
+
     final service = "${Constant.baseURLToken}booking";
     print(service);
     final resp = await post(
@@ -78,9 +82,11 @@ class BookingRepository extends BaseRepository {
   }
 
   Future<bool> DeleteBooking(String id) async {
-       final shared = await SharedPreferences.getInstance();
-    final xmodel = jsonDecode(shared.get(Constant.bearerName).toString());
-    String token = xmodel['token'];
+    String token = "";
+    await Constant().getShared().then((value) {
+      print(value);
+      token = value;
+    });
     final service = "${Constant.baseURLToken}deleteBooking";
     final body = <String, dynamic>{};
 
@@ -98,9 +104,11 @@ class BookingRepository extends BaseRepository {
   }
 
   Future<bool> editBooking(BookingRequest b, String id) async {
-       final shared = await SharedPreferences.getInstance();
-    final xmodel = jsonDecode(shared.get(Constant.bearerName).toString());
-    String token = xmodel['token'];
+    String token = "";
+    await Constant().getShared().then((value) {
+      print(value);
+      token = value;
+    });
     final body = b.toJson2(int.parse(id));
     final service = "${Constant.baseURLToken}Updatebooking";
     print(service);

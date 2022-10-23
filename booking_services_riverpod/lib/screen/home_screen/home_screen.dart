@@ -12,14 +12,22 @@ import 'package:intl/intl.dart';
 
 import '../../app/route.dart';
 import '../../provider/current_user_provider.dart';
+import '../../widget/card_home.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, ref) {
-    final banyak = useState<int>(0);
     final model = useState(ref.read(currentUserProvider.notifier).state!.model);
+    final banyak = useState<int>(0);
+    useEffect(() {
+      ref
+          .read(countProvider.notifier)
+          .count(tgl: DateFormat('yyyy-MM-dd').format(DateTime.now()));
+      banyak.value = 0 + ref.read(countProvider.notifier).state;
+      return () {};
+    }, []);
 
     return SafeArea(
       child: Scaffold(
@@ -129,141 +137,60 @@ class HomeScreen extends HookConsumerWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: InkWell(
+                      child: CardHome(
                         onTap: () {
-                          // ref.read(PelangganListProvider.notifier).list();
-                          // Timer(const Duration(seconds: 3), () {
                           Navigator.of(context).pushNamed(listPelangganRoute);
-                          // });
-                          // umumC.getPelanggan();
-                          // Get.toNamed("/pelanggan");
                         },
-                        child: Container(
-                          margin: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.person_search_rounded,
-                                color: Colors.amber,
-                                size: 60,
-                              ),
-                              Text(
-                                "Pelanggan",
-                                style: GoogleFonts.raleway(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
-                          height: 150,
+                        icon: Icon(
+                          Icons.person_search_rounded,
+                          color: Colors.amber,
+                          size: 60,
                         ),
+                        text: 'Pelanggan',
                       ),
                     ),
                     Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushNamed(laporanBookingRoute);
-                          // umumC.getBooking(DateFormat('yyyy-MM-dd').format(DateTime.now()));
-                          // Get.toNamed("/laporan-booking");
-                        },
-                        child: Container(
-                          margin: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.data_exploration_rounded,
-                                color: Colors.blue,
-                                size: 60,
-                              ),
-                              Text(
-                                "Data Booking",
-                                style: GoogleFonts.raleway(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
-                          height: 150,
-                        ),
-                      ),
-                    ),
+                        child: CardHome(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed(laporanBookingRoute);
+                            },
+                            icon: Icon(
+                              Icons.data_exploration_rounded,
+                              color: Colors.blue,
+                              size: 60,
+                            ),
+                            text: 'Data Booking')),
                   ],
                 ),
                 Row(
                   children: [
                     Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushNamed(inputBookingRoute);
-                          // umumC.getProduct();
-                          // umumC.getPelanggan();
-                          // Get.toNamed("/input-booking");
-                        },
-                        child: Container(
-                          margin: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
+                      child: CardHome(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(inputBookingRoute);
+                          },
+                          icon: Icon(
+                            Icons.book_outlined,
+                            color: Colors.green,
+                            size: 60,
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.book_outlined,
-                                color: Colors.green,
-                                size: 60,
-                              ),
-                              Text(
-                                "Booking",
-                                style: GoogleFonts.raleway(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
-                          height: 150,
-                        ),
-                      ),
+                          text: "Booking"),
                     ),
                     Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          ref.read(loginProvider.notifier).Logout();
-                          Navigator.of(context).pushReplacementNamed(loginRoute);
-                          // umumC.Logout();
-                        },
-                        child: Container(
-                          margin: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.logout_outlined,
-                                color: Colors.red,
-                                size: 60,
-                              ),
-                              Text(
-                                "Exit",
-                                style: GoogleFonts.raleway(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
-                          height: 150,
-                        ),
-                      ),
-                    ),
+                        child: CardHome(
+                            onTap: () {
+                              ref.read(loginProvider.notifier).Logout();
+                              Navigator.of(context)
+                                  .pushReplacementNamed(loginRoute);
+                              // umumC.Logout();
+                            },
+                            icon: Icon(
+                              Icons.logout_outlined,
+                              color: Colors.red,
+                              size: 60,
+                            ),
+                            text: "Exit")),
                   ],
                 ),
               ],
