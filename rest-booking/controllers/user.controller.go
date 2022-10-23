@@ -7,7 +7,6 @@ import (
 	"rest-booking/helper"
 	"rest-booking/models"
 
-	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 )
 
@@ -65,32 +64,20 @@ func Register(c echo.Context) error {
 }
 
 func CheckLogin(c echo.Context) error {
-	username := c.FormValue("username")
-	password := c.FormValue("password")
+	var obj models.CheckLoginModel
+	err := c.Bind(&obj)
+	if err != nil {
+		return c.String(http.StatusBadRequest, "bad request")
+	}
 
-	res, err := models.CheckLogin(username, password)
+	res, err := models.CheckLogin(obj.Username, obj.Password)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"messageww": err.Error(),
 		})
 	}
 
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-
-	claims["username"] = username
-	claims["level"] = "application"
-
-	t, err := token.SignedString([]byte("secret"))
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"messageww": err.Error(),
-		})
-	}
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"data":  res,
-		"token": t,
-	})
+	return c.JSON(http.StatusOK, res)
 }
 
 func GenerateHashPassword(c echo.Context) error {

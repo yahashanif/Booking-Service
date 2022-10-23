@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"rest-booking/db"
 	"rest-booking/helper"
+
+	"github.com/golang-jwt/jwt"
 )
 
 type User struct {
@@ -15,6 +17,12 @@ type User struct {
 	Email         string `json:"email"`
 	ProfilPathUrl string `json:"profil_path_url"`
 	Level         string `json:"level"`
+	Token         string `json:"token"`
+}
+
+type CheckLoginModel struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 func Register(user User, password string) (Response, error) {
@@ -84,13 +92,26 @@ func CheckLogin(username, password string) (Response, error) {
 		fmt.Print("Query Error")
 		return res, err
 	}
+	fmt.Println(password)
+
+	fmt.Println(pwd)
 
 	match, err := helper.CheckPasswordHash(password, pwd)
+	fmt.Println(match)
 	if !match {
 
 		fmt.Println("Hash and password doesn't match")
 		return res, err
 	}
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+
+	claims["username"] = obj.Username
+	claims["level"] = "application"
+
+	t, err := token.SignedString([]byte("secret"))
+	obj.Token = t
+
 	res.Status = http.StatusOK
 	res.Message = "Sukses Login"
 	res.Data = obj

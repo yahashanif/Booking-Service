@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"rest-booking/models"
 	"strconv"
@@ -36,8 +37,9 @@ func StorePelanggan(c echo.Context) error {
 func UpdatePelanggan(c echo.Context) error {
 	var obj models.Pelanggan
 	err := c.Bind(&obj)
+
 	if err != nil {
-		return c.String(http.StatusBadRequest, "bad request")
+		return c.String(http.StatusBadRequest, err.Error())
 	}
 
 	result, err := models.UpdatePelanggan(obj)
@@ -49,10 +51,12 @@ func UpdatePelanggan(c echo.Context) error {
 }
 
 func DeletePelanggan(c echo.Context) error {
-	id := c.FormValue("id")
+	id := c.Param("id")
+	fmt.Println(id)
 
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
+		fmt.Print(err.Error())
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 

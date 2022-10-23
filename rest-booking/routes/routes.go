@@ -37,7 +37,7 @@ func Init() *echo.Echo {
 		userRoutes.GET("/Pelanggan", controllers.FetchAllPelanggan)
 		userRoutes.POST("/Pelanggan", controllers.StorePelanggan)
 		userRoutes.POST("/PelangganUpdate", controllers.UpdatePelanggan)
-		userRoutes.POST("/PelangganDelete", controllers.DeletePelanggan)
+		userRoutes.POST("/PelangganDelete/:id", controllers.DeletePelanggan)
 
 	}
 	return e
